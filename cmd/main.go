@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -20,11 +21,16 @@ import (
 	dqcT "github.com/hanshal101/term-test-monitor/internal/teacher/dqc"
 	"github.com/hanshal101/term-test-monitor/internal/teacher/papers"
 	middleware "github.com/hanshal101/term-test-monitor/middleware/auth"
+	"github.com/joho/godotenv"
 )
 
 func init() {
 	postgres.PostgresInitializer()
 	migrate.Migrate()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
 
 func main() {
@@ -97,7 +103,7 @@ func main() {
 		teacherGroup.GET("/", teacher.BaseGET)
 		teacherGroup.GET("/getAttendence", attendence.Test3)
 		teacherGroup.POST("/getAttendence", attendence.CreateAttendence)
-		teacherGroup.PUT("/getAttendence", attendence.EditAttendance)
+		// teacherGroup.PUT("/getAttendence", attendence.EditAttendance)
 		teacherGroup.GET("/papers", papers.GetPaperRequest)
 		teacherGroup.POST("/papers", papers.CreatePaperRequest)
 		teacherGroup.DELETE("/papers/:reqID", papers.DeletePaperRequest)
